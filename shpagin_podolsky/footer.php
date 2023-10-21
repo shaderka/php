@@ -11,8 +11,8 @@
 
     <ul class="nav">
         <li class="nav-item"><a href="/shpagin_podolsky/dictonary/view.php" class="nav-link">Справочники</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Счета</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Клиенты</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Операции</a></li>
+        <li class="nav-item"><a href="/shpagin_podolsky/sheta/view.php" class="nav-link">Счета</a></li>
+        <li class="nav-item"><a href="/shpagin_podolsky/klient/view.php" class="nav-link">Клиенты</a></li>
+        <li class="nav-item"><a href="/shpagin_podolsky/oper_klient/view.php" class="nav-link">Операции</a></li>
     </ul>
 </footer>

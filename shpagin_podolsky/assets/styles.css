@@ -80,3 +80,8 @@ footer {
     }
 }
 
+
+.form-group:last-child {
+    margin-top: 30px;
+}
+
