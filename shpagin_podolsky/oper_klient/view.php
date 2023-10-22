@@ -9,7 +9,7 @@
         $current_page = "oper_klient";
         require_once '../header.php';
 
-        $tableRows = $mysqli -> query("SELECT number_account, name_operation, date_operation, price_operation FROM `schet`, `s_operation`, `oper_klient` WHERE oper_klient.id_schet = schet.id_schet AND s_operation.id_operation=oper_klient.id_operation");
+        $tableRows = $mysqli -> query("SELECT id_operklient,number_account, name_operation, date_operation, price_operation FROM `schet`, `s_operation`, `oper_klient` WHERE oper_klient.id_schet = schet.id_schet AND s_operation.id_operation=oper_klient.id_operation");
 
         function isDisabled($id){
             
@@ -27,15 +27,15 @@
                 </tr>
             </thead>
             <tbody>
-                <?php while($row = $tableRows -> fetch_assoc()){ ?>
+                <?php while($row = $tableRows -> fetch_assoc()){ extract($row) ?>
                 <tr>
                     <td ><?= $row['number_account']?></td>
                     <td ><?= $row['name_operation']?></td>
                     <td ><?= $row['date_operation']?></td>
                     <td ><?= $row['price_operation']?></td>
                     <td class="btns"> 
-                        <a type="button" class="btn btn-secondary" href="">Редактировать</a> 
-                        <a type="button" class="btn btn-secondary" href="">Удалить</a>
+                        <a type="button" class="btn btn-secondary" href="edit.php?id=<?=$id_operklient?>">Редактировать</a> 
+                        <a type="button" class="btn btn-secondary" href="delete.php?id=<?=$id_operklient?>">Удалить</a>
                     </td>
                 </tr>
                 <?php } ?>
