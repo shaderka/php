@@ -66,7 +66,7 @@ $sOperationTable = $mysqli -> query("SELECT * FROM `s_operation` ORDER BY `name_
             <?= $message?>
         </div>
     <?php } ?>
-    <form method="post">
+    <form method="post" class="form">
         <div class="form-group">
             <label for="exampleFormControlSelect1">Номер счета</label>
             <select class="form-control" id="exampleFormControlSelect1" name="shet_id">

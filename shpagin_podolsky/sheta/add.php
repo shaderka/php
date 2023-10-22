@@ -56,7 +56,7 @@ $sAccoountTable = $mysqli -> query("SELECT * FROM `s_accoount` ORDER BY `name_ac
             <?= $message?>
         </div>
     <?php } ?>
-    <form method="post">
+    <form method="post" class="form">
       <div class="form-group">
         <label for="exampleFormControlSelect1">Клиент</label>
             <select class="form-control" id="exampleFormControlSelect1" name="client_id">

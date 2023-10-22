@@ -51,7 +51,7 @@ include '../header.php';
             <?= $message?>
         </div>
     <?php } ?>
-    <form method="post">
+    <form method="post" class="form">
       <div class="form-group">
         <label for="exampleInputFIO">ФИО клиента</label>
         <input type="text" class="form-control" id="exampleInputFIO" name="fio">

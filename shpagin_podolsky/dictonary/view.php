@@ -65,7 +65,7 @@
                 <td width="65%"><?= $row["name"] ?></td>
                 <td class="btns"> 
                     <a type="button" class="btn btn-secondary" href="edit.php?table=<?=$curent_table?>&id=<?=$row["id"]?>">Редактировать</a>
-                    <a type="button" class="btn btn-secondary <?= !$row["access_delete"] ? "disabled" : ""?>" href="delete.php?table=<?=$curent_table?>&id=<?=$row["id"]?>" onclick='return confirm(`Вы действительно хотите удалить запись "<?=$row["name"]?>"?`);'>Удалить</a>
+                    <a type="button" class="btn btn-secondary <?= !$row["access_delete"] ? "disabled" : ""?>"  href="delete.php?table=<?=$curent_table?>&id=<?=$row["id"]?>" onclick='return confirm(`Вы действительно хотите удалить запись "<?=$row["name"]?>"?`);'>Удалить</a>
                 </td>
             </tr>
             <?php } ?>
