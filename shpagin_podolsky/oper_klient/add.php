@@ -1,6 +1,6 @@
 <?php
    require_once "../bd.php";
-   $title = "Добавление клиента";
+   $title = "Добавление операции";
    require_once "../head.php";
 
    if(
@@ -8,10 +8,11 @@
         && ($d_oper = $_POST['d_oper'])
         && (isset($_POST['sum_oper']))
         && ($sumOper = $_POST['sum_oper'])
+        && (isset($_POST['shet_id']))
+        && ($schet = $_POST['shet_id'])
+        && (isset($_POST['s_operation_id']))
+        && ($vid_oper = $_POST['s_operation_id'])
     ){
-        $schet = $_POST['shet_id'];
-        $vid_oper = $_POST['s_operation_id'];
-
          $result = $mysqli -> query("INSERT INTO `oper_klient` VALUES (NULL, $schet, $vid_oper, '$d_oper', $sumOper)");
 
          if($result){

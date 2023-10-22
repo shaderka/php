@@ -19,7 +19,6 @@ if(!$validate){
 
 extract($oldData);
 
-
 $title = "Редактирование записи \"$number_account\"";
 require_once "../head.php";
 
@@ -62,6 +61,9 @@ if(
     $message = "Заполните обязательные поля";
 }
 
+$id_klient_old = $id_klient;
+$id_account_old = $id_account;
+
 ?>
 
 <body class="d-flex flex-column min-vh-100">
@@ -69,7 +71,7 @@ if(
 $current_page = "sheta";
 include '../header.php';
 
-$klientTable = $mysqli -> query("SELECT `id_klient`, `name_klient`, `klient_fon` FROM `klient` ORDER BY `name_klient`");
+$klientTable = $mysqli -> query("SELECT * FROM `klient` ORDER BY `name_klient`");
 $sAccoountTable = $mysqli -> query("SELECT * FROM `s_accoount` ORDER BY `name_account`");
 ?>
 <div class="container text-center">
@@ -81,17 +83,17 @@ $sAccoountTable = $mysqli -> query("SELECT * FROM `s_accoount` ORDER BY `name_ac
     <form method="post">
       <div class="form-group">
         <label for="exampleFormControlSelect1">ФИО клиента</label>
-            <select class="form-control" id="exampleFormControlSelect1" name="client_id" value="<?=$id_klient?>">
+            <select class="form-control" id="exampleFormControlSelect1" name="client_id">
                  <?php while($row = $klientTable -> fetch_assoc()){ extract($row)?>
-                    <option value="<?=$id_klient?>"><?= "$name_klient - $klient_fon"?></option>
+                    <option value="<?=$id_klient?>" <?= $id_klient_old == $id_klient ? 'selected' : ''?>><?= "$name_klient - $klient_fon"?></option>
                 <?php } ?>
             </select>
       </div>
       <div class="form-group">
         <label for="exampleFormControlSelect2">Вид счета</label>
-            <select class="form-control" id="exampleFormControlSelect2" name="s_accoount_id" value="<?=$id_account?>">
+            <select class="form-control" id="exampleFormControlSelect2" name="s_accoount_id">
                 <?php while($row = $sAccoountTable -> fetch_assoc()){ extract($row)?>
-                    <option value="<?=$id_account?>"><?= "$name_account"?></option>
+                    <option value="<?=$id_account?>" <?= $id_account_old == $id_account ? 'selected' : ''?>><?= "$name_account"?></option>
                 <?php } ?>
             </select>
       </div>
