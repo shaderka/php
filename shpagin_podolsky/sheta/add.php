@@ -1,6 +1,6 @@
 <?php
     require_once "../bd.php";
-    $title = "Добавление клиента";
+    $title = "Добавление счета";
     require_once "../head.php";
 
     if(
@@ -8,11 +8,13 @@
         && ($nomer = $_POST['shet_number'])
         && (isset($_POST['d_open']))
         && ($d_open = $_POST['d_open'])
+        && (isset($_POST['client_id']))
+        && ($klient = $_POST['client_id'])
+        && (isset($_POST['s_accoount_id']))
+        && ($vid_schet = $_POST['s_accoount_id'])
     ){
         $d_close = $_POST['d_close'] ?? null;
         $price_open = $_POST['sum'] ?? null;
-        $klient = $_POST['client_id'];
-        $vid_schet = $_POST['s_accoount_id'];
         $result = $mysqli -> query("SELECT * FROM `schet` WHERE `number_account` = $nomer");
         $count = $result -> num_rows;
 
@@ -54,7 +56,7 @@ $sAccoountTable = $mysqli -> query("SELECT * FROM `s_accoount` ORDER BY `name_ac
             <?= $message?>
         </div>
     <?php } ?>
-    <form method="post">
+    <form method="post" class="form">
       <div class="form-group">
         <label for="exampleFormControlSelect1">Клиент</label>
             <select class="form-control" id="exampleFormControlSelect1" name="client_id">
@@ -81,7 +83,7 @@ $sAccoountTable = $mysqli -> query("SELECT * FROM `s_accoount` ORDER BY `name_ac
       </div>
       <div class="form-group">
         <label for="exampleInputDClose">Дата закрытия счета</label>
-        <input type="date" class="form-control" min="<?php echo date('Y-m-d', strtotime('+1 month', strtotime(date('Y-m-d')))) ?>" id="exampleInputDClose" name="d_close">
+        <input type="date" class="form-control" min="<?php echo date('Y-m-d') ?>" id="exampleInputDClose" name="d_close">
       </div>
       <div class="form-group">
         <label for="exampleInputSum">Начальная сумма на счете</label>

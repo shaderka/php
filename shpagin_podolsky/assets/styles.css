@@ -12,6 +12,7 @@ body{
 
 header {
     justify-content: space-between;
+
 }
 
 footer {
@@ -81,7 +82,28 @@ footer {
 }
 
 
-.form-group:last-child {
-    margin-top: 30px;
+.form {
+    margin: 0 15vw;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px #ccc;
+    padding: 40px;
 }
 
+.form-group {
+    margin-bottom: 20px;
+}
+
+.poisk {
+    padding-bottom: 40px;
+    display: inline-flex;
+    justify-content: space-around;
+    align-items: end;
+    width: 80%;
+}
+
+.nomer-schet {
+    position: relative;
+}
+
+.date-int {
+}
