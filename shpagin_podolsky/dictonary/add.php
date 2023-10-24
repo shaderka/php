@@ -49,7 +49,7 @@ include '../header.php';
             <?= $message?>
         </div>
     <?php } ?>
-    <form method="post">
+    <form method="post" class="form">
         <div class="form-group">
             <label for="formGroupExampleInput">Название</label>
             <input type="text" class="form-control" name="name" id="formGroupExampleInput" placeholder="Введите новую запись">
