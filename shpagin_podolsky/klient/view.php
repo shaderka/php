@@ -30,7 +30,7 @@
             }
         }
 
-        $tableRows = $mysqli -> query("SELECT * FROM `klient` $filter");
+        $tableRows = $mysqli -> query("SELECT * FROM `klient` $filter" ORDER BY name_klient);
     ?>
     <div class="container text-center">
           <form method="post" class="poisk">

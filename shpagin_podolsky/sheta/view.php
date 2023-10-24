@@ -27,7 +27,7 @@
         }
 
         
-        $tableRows = $mysqli -> query("SELECT id_schet ,name_klient, name_account, number_account, date_open, date_close, price_open FROM `schet`, `s_accoount`, `klient` WHERE klient.id_klient = schet.id_klient AND schet.id_account=s_accoount.id_account $filter");
+        $tableRows = $mysqli -> query("SELECT id_schet ,name_klient, name_account, number_account, date_open, date_close, price_open FROM `schet`, `s_accoount`, `klient` WHERE klient.id_klient = schet.id_klient AND schet.id_account=s_accoount.id_account $filter ORDER BY number_account");
     ?>
     <div class="container text-center">
         <form method="post" class="poisk">
@@ -58,10 +58,10 @@
         <table class="table dict">
             <thead>
                 <tr>
-                    <th scope="col">ФИО клиента</th>
+                    <th data-sort scope="col" onclick="sortTable(0, this, 'str')">ФИО клиента</th>
                     <th scope="col" class="<?= isset($hideVidShetColumn) && $hideVidShetColumn ? 'd-none' : ''?>">Вид счета</th>
-                    <th scope="col">Номер счета</th>
-                    <th scope="col">Дата открытия счета</th>
+                    <th data-sort scope="col" onclick="sortTable(2, this, 'num')">Номер счета</th>
+                    <th data-sort scope="col" onclick="sortTable(3, this, 'str')">Дата открытия счета</th>
                     <th scope="col" class="<?= isset($hideDClodeColumn) && $hideDClodeColumn ? 'd-none' : ''?>">Дата закрытия счета</th>
                     <th scope="col">Начальная сумма на счете</th>
                     <th scope="col"><a type="button" class="btn btn-success" href="add.php">Добавить</a></th>
@@ -96,4 +96,41 @@
 ?>
 
 </body>
+
+<script>
+    function sortTable(n, evt, type) {
+    var table = document.querySelector('table'),
+        thead = document.querySelector('thead'),
+        tbody = document.querySelector('tbody'),
+        hData = [...thead.querySelectorAll('th')],
+        bRows = [...tbody.rows],
+        desc = false;
+
+        hData.map ( (head) => {
+            if(head != evt ) {
+                head.classList.remove('asc', 'desc');
+            }
+        } );
+
+        desc = evt.classList.contains ('asc') ? true : false;
+        evt.classList[desc ? 'remove' : 'add']('asc');
+        evt.classList[desc ? 'add' : 'remove']('desc');
+    
+
+        tbody.innerHTML = '';
+
+        bRows.sort( (a, b) => {
+            let x = a.getElementsByTagName('td')[n].innerHTML.toLowerCase(),
+                y= b.getElementsByTagName('td')[n].innerHTML.toLowerCase();
+            let notZero = x - y == 0 ? false : true; 
+            return type == 'str' ? (desc ? (x < y ? 1 : -1) : (x < y ? -1 : 1)) : (desc ? (y - x) : (x - y));
+        });
+
+        bRows.map ( (bRow) => {
+            console.log(bRow.innerHTML);
+            tbody.appendChild(bRow);
+        } )
+}
+ 
+</script>
 </html>

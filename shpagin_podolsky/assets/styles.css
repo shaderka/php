@@ -105,5 +105,45 @@ footer {
     position: relative;
 }
 
-.date-int {
+th {
+    position: relative;
+    transition: all linear .3s;
+    color: gray;
+    cursor: default;
+    user-select: none;
+}
+
+th.asc,
+th.desc {
+    color: black;
+}
+
+th[data-sort] {
+    cursor: pointer;
+}
+
+th[data-sort]:before, 
+th[data-sort]:after {
+    content: '';
+    position: absolute;
+    height: 0;
+    width: 0;
+    right: 0;
+    opacity: 0.3;
+    border: 6px solid transparent;
+}
+
+th[data-sort]:before {
+    border-bottom-color: black;
+    top: 40%;
+}
+
+th[data-sort]:after {
+    border-top-color: black;
+    top: 65%;
+}
+
+th.asc:before,
+th.desc:after {
+    opacity: 1;
 }

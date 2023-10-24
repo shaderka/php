@@ -21,7 +21,7 @@
         }
 
 
-        $tableRows = $mysqli -> query("SELECT id_operklient,number_account, name_operation, date_operation, price_operation FROM `schet`, `s_operation`, `oper_klient` WHERE oper_klient.id_schet = schet.id_schet AND s_operation.id_operation=oper_klient.id_operation $filter");
+        $tableRows = $mysqli -> query("SELECT id_operklient,number_account, name_operation, date_operation, price_operation FROM `schet`, `s_operation`, `oper_klient` WHERE oper_klient.id_schet = schet.id_schet AND s_operation.id_operation=oper_klient.id_operation $filter ORDER BY date_operation");
     ?>
     <div class="container text-center">
         <form method="post" class="poisk">
@@ -46,9 +46,9 @@
         <table class="table dict">
             <thead>
                 <tr>
-                    <th scope="col">Номер счета</th>
-                    <th scope="col">Вид операции</th>
-                    <th scope="col">Дата операции</th>
+                    <th data-sort scope="col" onclick="sortTable(0, this, 'num')">Номер счета</th>
+                    <th data-sort scope="col" onclick="sortTable(1, this, 'str')">Вид операции</th>
+                    <th data-sort scope="col" onclick="sortTable(2, this, 'str')">Дата операции</th>
                     <th scope="col">Сумма операции</th>
                     <th scope="col"><a type="button" class="btn btn-success" href="add.php">Добавить</a></th>
                 </tr>
@@ -75,4 +75,41 @@
 ?>
 
 </body>
+
+<script>
+    function sortTable(n, evt, type) {
+    var table = document.querySelector('table'),
+        thead = document.querySelector('thead'),
+        tbody = document.querySelector('tbody'),
+        hData = [...thead.querySelectorAll('th')],
+        bRows = [...tbody.rows],
+        desc = false;
+
+        hData.map ( (head) => {
+            if(head != evt ) {
+                head.classList.remove('asc', 'desc');
+            }
+        } );
+
+        desc = evt.classList.contains ('asc') ? true : false;
+        evt.classList[desc ? 'remove' : 'add']('asc');
+        evt.classList[desc ? 'add' : 'remove']('desc');
+    
+
+        tbody.innerHTML = '';
+
+        bRows.sort( (a, b) => {
+            let x = a.getElementsByTagName('td')[n].innerHTML.toLowerCase(),
+                y= b.getElementsByTagName('td')[n].innerHTML.toLowerCase();
+            let notZero = x - y == 0 ? false : true; 
+            return type == 'str' ? (desc ? (x < y ? 1 : -1) : (x < y ? -1 : 1)) : (desc ? (y - x) : (x - y));
+        });
+
+        bRows.map ( (bRow) => {
+            console.log(bRow.innerHTML);
+            tbody.appendChild(bRow);
+        } )
+}
+ 
+</script>
 </html>
