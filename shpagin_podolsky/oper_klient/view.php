@@ -146,6 +146,7 @@
         <div class="alert alert-warning" role="alert">
                 Нет записей
         </div>
+        <a type="button" class="btn btn-success" href="add.php">Добавить</a>
     <?php } ?>
     </div>
 
