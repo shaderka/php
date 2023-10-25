@@ -70,7 +70,7 @@ include '../header.php';
       </div>
       <button type="submit" class="btn btn-secondary">Добавить</button>
       <a href="view.php" class="btn btn-secondary">Назад</a>
-</form>
+    </form>
 </div>
 
 <?php

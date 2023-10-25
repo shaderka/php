@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3308
--- Время создания: Окт 19 2023 г., 22:26
+-- Время создания: Окт 25 2023 г., 20:12
 -- Версия сервера: 8.0.29
 -- Версия PHP: 7.2.34
 
@@ -26,24 +26,43 @@ USE `shpagin_podolskiy`;
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `admin`
+--
+
+CREATE TABLE `admin` (
+  `id_admin` int NOT NULL,
+  `login` varchar(50) NOT NULL,
+  `pass` varchar(50) NOT NULL,
+  `fio` varchar(150) NOT NULL,
+  `role` varchar(30) NOT NULL,
+  `email` varchar(30) NOT NULL,
+  `phone` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `klient`
 --
 
-DROP TABLE IF EXISTS `klient`;
 CREATE TABLE `klient` (
   `id_klient` int NOT NULL,
   `name_klient` varchar(40) NOT NULL,
   `klient_fon` varchar(14) NOT NULL,
   `number_passport` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `adress` varchar(60) NOT NULL
+  `adress` varchar(60) NOT NULL,
+  `image` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Дамп данных таблицы `klient`
 --
 
-INSERT INTO `klient` (`id_klient`, `name_klient`, `klient_fon`, `number_passport`, `adress`) VALUES
-(1, 'укеукеу', 'укеуке', 'укеуке', 'укеуке');
+INSERT INTO `klient` (`id_klient`, `name_klient`, `klient_fon`, `number_passport`, `adress`, `image`) VALUES
+(1, 'укеукеу', 'укеуке', 'укеуке', 'укеуке', ''),
+(2, '1', '1', '1', '1', ''),
+(3, '2', '2', '2', '2', ''),
+(4, '3', '3', '3', '3', '');
 
 -- --------------------------------------------------------
 
@@ -51,14 +70,20 @@ INSERT INTO `klient` (`id_klient`, `name_klient`, `klient_fon`, `number_passport
 -- Структура таблицы `oper_klient`
 --
 
-DROP TABLE IF EXISTS `oper_klient`;
 CREATE TABLE `oper_klient` (
   `id_operklient` int NOT NULL,
   `id_schet` int NOT NULL,
   `id_operation` int NOT NULL,
-  `date_operation` date NOT NULL,
+  `date_operation` datetime NOT NULL,
   `price_operation` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Дамп данных таблицы `oper_klient`
+--
+
+INSERT INTO `oper_klient` (`id_operklient`, `id_schet`, `id_operation`, `date_operation`, `price_operation`) VALUES
+(6, 2, 13, '2023-10-25 19:27:00', 234);
 
 -- --------------------------------------------------------
 
@@ -66,7 +91,6 @@ CREATE TABLE `oper_klient` (
 -- Структура таблицы `schet`
 --
 
-DROP TABLE IF EXISTS `schet`;
 CREATE TABLE `schet` (
   `id_schet` int NOT NULL,
   `id_klient` int NOT NULL,
@@ -82,7 +106,8 @@ CREATE TABLE `schet` (
 --
 
 INSERT INTO `schet` (`id_schet`, `id_klient`, `id_account`, `number_account`, `date_open`, `date_close`, `price_open`) VALUES
-(1, 1, 4, 234234, '2023-10-19', NULL, NULL);
+(2, 2, 5, 1, '2023-10-25', '2023-10-25', 111111),
+(3, 2, 7, 11, '2023-10-25', '2023-10-25', 123123);
 
 -- --------------------------------------------------------
 
@@ -90,7 +115,6 @@ INSERT INTO `schet` (`id_schet`, `id_klient`, `id_account`, `number_account`, `d
 -- Структура таблицы `s_accoount`
 --
 
-DROP TABLE IF EXISTS `s_accoount`;
 CREATE TABLE `s_accoount` (
   `id_account` int NOT NULL,
   `name_account` varchar(20) NOT NULL
@@ -101,7 +125,11 @@ CREATE TABLE `s_accoount` (
 --
 
 INSERT INTO `s_accoount` (`id_account`, `name_account`) VALUES
-(4, 'апрапрапрывааыв');
+(4, 'апрапрапрывааыв'),
+(5, '1'),
+(6, '2'),
+(7, '3'),
+(8, '4');
 
 -- --------------------------------------------------------
 
@@ -109,15 +137,30 @@ INSERT INTO `s_accoount` (`id_account`, `name_account`) VALUES
 -- Структура таблицы `s_operation`
 --
 
-DROP TABLE IF EXISTS `s_operation`;
 CREATE TABLE `s_operation` (
   `id_operation` int NOT NULL,
   `name_operation` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
+-- Дамп данных таблицы `s_operation`
+--
+
+INSERT INTO `s_operation` (`id_operation`, `name_operation`) VALUES
+(13, '1'),
+(14, '2'),
+(15, '3'),
+(16, '4');
+
+--
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`);
 
 --
 -- Индексы таблицы `klient`
@@ -158,34 +201,40 @@ ALTER TABLE `s_operation`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id_admin` int NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT для таблицы `klient`
 --
 ALTER TABLE `klient`
-  MODIFY `id_klient` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_klient` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `oper_klient`
 --
 ALTER TABLE `oper_klient`
-  MODIFY `id_operklient` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_operklient` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT для таблицы `schet`
 --
 ALTER TABLE `schet`
-  MODIFY `id_schet` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_schet` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `s_accoount`
 --
 ALTER TABLE `s_accoount`
-  MODIFY `id_account` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_account` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT для таблицы `s_operation`
 --
 ALTER TABLE `s_operation`
-  MODIFY `id_operation` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_operation` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
