@@ -94,11 +94,21 @@ footer {
 }
 
 .poisk {
-    padding-bottom: 40px;
     display: inline-flex;
     justify-content: space-around;
     align-items: end;
     width: 80%;
+}
+
+.poisk:first-child {
+    border-radius: 10px;
+    box-shadow: 0 4px 16px #ccc;
+    padding: 40px;
+}
+
+.poisk:nth-child(2){
+    padding-bottom: 0;
+    padding-top: 40px
 }
 
 .nomer-schet {

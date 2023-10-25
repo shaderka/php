@@ -12,7 +12,7 @@ define("DICTONARY_TABLES_STRUCT",
 define("DICTONARY_TABLES_NAME", ["s_accoount" => "Виды аккаунтов", "s_operation" => "Виды операций"]);
 
 
-$mysqli = mysqli_connect("localhost", "root", "", "shpagin_podolskiy", "3308");
+$mysqli = mysqli_connect("localhost", "root", "root", "shpagin_podolskiy", "3306");
 
 if ($mysqli === false) {
     print("Ошибка: Невозможно подключиться к MySQL " . mysqli_connect_error());
