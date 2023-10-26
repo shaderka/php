@@ -11,23 +11,32 @@ require_once "../bd.php";
         && (isset($_POST['address']))
         && ($address = $_POST['address'])
     ){
+        $imgname = $_FILES['img']['name'] ?? null;
         $passport = $_POST['passport'] ?? null;
         $passportSearch = $passport ? " OR `number_passport` = '$passport'" : "";
         $result = $mysqli -> query("SELECT * FROM `klient` WHERE `klient_fon` = '$tel'$passportSearch");
         $count = $result -> num_rows;
 
         if($count === 0){
+            $imgnameSQLStr = $imgname ? "'$imgname'" : "NULL";
             $passportSQLStr = $passport ? "'$passport'" : "NULL";
 
-            $result = $mysqli -> query("INSERT INTO `klient` VALUES (NULL, '$FIO', '$tel', $passportSQLStr, '$address')");
+            if((move_uploaded_file($_FILES['img']['tmp_name'], '../assets/img/'.$_FILES['img']['name'])) || (!is_uploaded_file($_FILES['img']['tmp_name']))){
+                $result = $mysqli -> query("INSERT INTO `klient` VALUES (NULL, '$FIO', '$tel', $passportSQLStr, '$address', $imgnameSQLStr)");
 
-            if($result){
-                $resultCode = "success";
-                $message = "Запись успешно добавлена";
-            }else{
+                if($result){
+                    $resultCode = "success";
+                    $message = "Запись успешно добавлена";
+                }else{
+                    $resultCode = "danger";
+                    $message = "Ошибка при добавлении записи";
+                }
+            } else {
                 $resultCode = "danger";
-                $message = "Ошибка при добавлении записи";
+                $message = "Ошибка при загрузке изображения";
             }
+
+            
 
         }else{
             $resultCode = "warning";
@@ -51,7 +60,11 @@ include '../header.php';
             <?= $message?>
         </div>
     <?php } ?>
-    <form method="post" class="form">
+    <form method="post" class="form" enctype="multipart/form-data">
+        <div class="form-group imgSelect">
+            <img src="" id="img" class="img-thumbnail" alt="">
+            <input type="file" class="form-control" accept="image/jpeg, image/png" name="img" id="InputImg" onchange="readURL(this)">
+        </div>
       <div class="form-group">
         <label for="exampleInputFIO">ФИО клиента</label>
         <input type="text" class="form-control" id="exampleInputFIO" name="fio">
@@ -77,4 +90,18 @@ include '../header.php';
 include '../footer.php';
 ?>
 </body>
+<script>
+function readURL(evt) {
+    var file = evt.files;
+    if(file.length > 0){
+        var reader = new FileReader();
+
+        reader.onload = function(event) {
+            document.getElementById('img').setAttribute("src",event.target.result);
+        };
+
+        reader.readAsDataURL(file[0])
+    }
+}
+</script>
 </html>

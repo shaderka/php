@@ -67,6 +67,7 @@
                     <th scope="col">Телефон</th>
                     <th scope="col" class="<?= isset($hideNumberPassport) && $hideNumberPassport ? 'd-none' : ''?>">Номер паспорта</th>
                     <th scope="col" class="<?= isset($hideAddress) && $hideAddress ? 'd-none' : ''?>">Адрес</th>
+                    <th scope="col"></th>
                     <th scope="col"><a type="button" class="btn btn-success" href="add.php">Добавить</a></th>
                 </tr>
             </thead>
@@ -77,6 +78,7 @@
                     <td ><?= $klient_fon?></td>
                     <td class="<?= isset($hideNumberPassport) && $hideNumberPassport ? 'd-none' : ''?>"><?= $number_passport?></td>
                     <td class="<?= isset($hideAddress) && $hideAddress ? 'd-none' : ''?>"><?= $adress?></td>
+                    <td><img src="../assets/img/<?=$image?>" class="img-thumbnail <?= !empty($image) ? '' : 'd-none' ?>" alt=""></td>
                     <td class="btns"> 
                         <a type="button" class="btn btn-secondary" href="edit.php?id=<?=$id_klient?>">Редактировать</a>
                         <a type="button" class="btn btn-secondary <?= disabledDelete($id_klient) ? 'disabled' : '' ?>" href="delete.php?id=<?=$id_klient?>" onclick='return confirm(`Вы действительно хотите удалить запись "<?="$name_klient - $klient_fon"?>"?`);'>Удалить</a>

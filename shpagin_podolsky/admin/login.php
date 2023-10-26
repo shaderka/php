@@ -3,7 +3,6 @@ session_start();
 $title = "Логин";
 require_once "../head.php";
 require_once "../bd.php";
-
 if(
     isset($_POST['login']) && ($login = $_POST['login'])
     && isset($_POST['pass']) && ($pass = $_POST['pass'])
@@ -29,8 +28,8 @@ elseif($_SERVER['REQUEST_METHOD'] === "POST"){
 }
 
 ?>
-<body class="d-flex flex-column min-vh-100">
-    <div class="container text-center">
+<body class="d-flex flex-column min-vh-100 login-form">
+    <div class="container text-center ">
         <?php if(isset($resultCode) && isset($message)) {?>
             <div class="alert alert-<?=$resultCode?>" role="alert">
                 <?= $message?>
@@ -43,7 +42,7 @@ elseif($_SERVER['REQUEST_METHOD'] === "POST"){
             </div>
             <div class="form-group">
                 <label for="inputPass">Пароль</label>
-                <input type="text" class="form-control" id="inputPass" name="pass">
+                <input type="password" class="form-control" id="inputPass" name="pass">
             </div>
             <button type="submit" class="btn btn-secondary">Вход</button>
             <a href="../index.php" class="btn btn-secondary">На главную</a>

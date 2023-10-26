@@ -57,7 +57,7 @@ if(
 
 extract(getAdmin($id));
 ?>
-<body class="d-flex flex-column min-vh-100">
+<body class="d-flex flex-column min-vh-100 login-form">
 <div class="container text-center">
     <?php if(isset($resultCode) && isset($message)) {?>
         <div class="alert alert-<?=$resultCode?>" role="alert">

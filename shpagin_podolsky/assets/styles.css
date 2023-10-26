@@ -103,12 +103,12 @@ footer {
 .poisk:first-child {
     border-radius: 10px;
     box-shadow: 0 4px 16px #ccc;
-    padding: 40px;
+    padding: 30px;
+    margin-bottom: 40px;
 }
 
 .poisk:nth-child(2){
     padding-bottom: 0;
-    padding-top: 40px
 }
 
 .nomer-schet {
@@ -156,4 +156,28 @@ th[data-sort]:after {
 th.asc:before,
 th.desc:after {
     opacity: 1;
+}
+
+.imgSelect {
+    position: relative;
+}
+
+.imgSelect input[type="file"] {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.imgSelect .img-thumbnail {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px;
+}
+
+td img {
+    width: 60px;
+    height: 60px;
+}
+
+.login-form{
+    justify-content: center;
 }
