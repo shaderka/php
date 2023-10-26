@@ -132,7 +132,7 @@
                     <td ><?= $number_account?></td>
                     <td ><?= $name_operation?></td>
                     <td class="<?= $hideFIOklientColumn ? 'd-none' : ''?>" ><?= $name_klient?></td>
-                    <td ><?= date("d.m.Y H:i:s",strtotime($date_operation))?></td>
+                    <td d-open="<?=$date_operation?>" ><?= date("d.m.Y H:i:s",strtotime($date_operation))?></td>
                     <td ><?= $price_operation?></td>
                     <td class="btns"> 
                         <a type="button" class="btn btn-secondary" href="edit.php?id=<?=$id_operklient?>">Редактировать</a> 
@@ -185,8 +185,9 @@
             if(type!='date'){
                 return type == 'str' ? (desc ? (x < y ? 1 : -1) : (x < y ? -1 : 1)) : (desc ? (y - x) : (x - y));
             }  else {
-                console.log(new Date(y));
-                return desc ? (new Date(y)- new Date(x)) : (new Date(x) - new Date(y));
+                x = Date.parse(a.getElementsByTagName('td')[n].getAttribute('d-open'));
+                y = Date.parse(b.getElementsByTagName('td')[n].getAttribute('d-open'))
+                return desc ? (y-x) : (x-y);
             }
             
         });

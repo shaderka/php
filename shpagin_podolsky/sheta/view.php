@@ -138,7 +138,7 @@
                     <td class="<?= isset($hideFIOColumn) && $hideFIOColumn ? 'd-none' : ''?>"><?= $name_klient?></td>
                     <td class="<?= isset($hideVidShetColumn) && $hideVidShetColumn ? 'd-none' : ''?>"><?= $name_account?></td>
                     <td ><?= $number_account?></td>
-                    <td ><?= $date_open ? date("d.m.Y",strtotime($date_open)) : ''?></td>
+                    <td d-open="<?=$date_open?>"><?= $date_open ? date("d.m.Y",strtotime($date_open)) : ''?></td>
                     <td class="<?= isset($hideDClodeColumn) && $hideDClodeColumn ? 'd-none' : ''?>"><?= $date_close ? date("d.m.Y",strtotime($date_close)) : ''?></td>
                     <td ><?= $price_open?></td>
                     <td class="btns"> 
@@ -193,8 +193,9 @@
             if(type!='date'){
                 return type == 'str' ? (desc ? (x < y ? 1 : -1) : (x < y ? -1 : 1)) : (desc ? (y - x) : (x - y));
             }  else {
-                console.log(new Date(y));
-                return desc ? (new Date(y)- new Date(x)) : (new Date(x) - new Date(y));
+                x = Date.parse(a.getElementsByTagName('td')[n].getAttribute('d-open'));
+                y = Date.parse(b.getElementsByTagName('td')[n].getAttribute('d-open'))
+                return desc ? (y-x) : (x-y);
             }
             
         });
