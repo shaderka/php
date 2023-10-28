@@ -9,8 +9,16 @@
         require_once 'utils.php';
 
         $filter = '';
+        $sort = '';
 
-        if(isset($_POST['action'])){
+        $sortColumn = $_POST['sort_col'] ?? '';
+        $sortDirection = $_POST['sort_direction'] ?? '';
+
+        if($sortColumn && $sortDirection){
+            $sort = " ORDER BY `$sortColumn` $sortDirection";
+        }
+
+        if(isset($_POST['action']) && $_POST['action']){
             if($_POST['action'] === "filter_shet_number"){
                 if(isset($_POST['filter_shet_number']) && $_POST['filter_shet_number']){
                     $filter = " AND `number_account` LIKE '%{$_POST['filter_shet_number']}%'";
@@ -19,8 +27,6 @@
                 }else{
                     $message = "Укажите значения для отбора";
                 }
-
-
             }
 
             if($_POST['action'] === "filter_data_interval"){
@@ -48,17 +54,19 @@
         }
 
 
-
-
         $tableSelectKlientRows = $mysqli -> query("SELECT `klient`.`id_klient`, `name_klient`, `klient_fon` FROM `schet`, `klient` WHERE klient.id_klient = schet.id_klient GROUP BY `klient`.`id_klient` ORDER BY `name_klient`");
 
         $tableSelectNameAccountRows = $mysqli -> query("SELECT DISTINCT `schet`.`id_account`, `name_account` FROM `schet`, `s_accoount` WHERE schet.id_account=s_accoount.id_account ORDER BY `name_account`");
         
-        $tableRows = $mysqli -> query("SELECT id_schet ,name_klient, name_account, number_account, date_open, date_close, price_open FROM `schet`, `s_accoount`, `klient` WHERE klient.id_klient = schet.id_klient AND schet.id_account=s_accoount.id_account $filter ORDER BY number_account");
+        $tableRows = $mysqli -> query("SELECT id_schet ,name_klient, name_account, number_account, date_open, date_close, price_open FROM `schet`, `s_accoount`, `klient` WHERE klient.id_klient = schet.id_klient AND schet.id_account=s_accoount.id_account $filter $sort");
     ?>
     <div class="container text-center">
         <form method="post">
             <div class="poisk">
+                <input type="hidden" name="sort_col" id="hidden_input_sort_col" value="<?= $sortColumn ?>">
+                <input type="hidden" name="sort_direction" id="hidden_input_sort_direction" value="<?= $sortDirection ?>">
+                <button id="hidden_button_send" name="action" class="d-none" value="<?= $_POST['action'] ?? ''?>"></button>
+
                 <div class="poisk-el nomer-scheta">
                     <label>
                         Номер счета
@@ -80,7 +88,7 @@
                 </div>
                 <a href="view.php" class="btn btn-secondary poisk-el" >Сбросить</a>
             </div>
-            
+
 
             <div class="poisk">
                      <div class="poisk-el">
@@ -95,8 +103,8 @@
                         </select>
                     </label>
                     <button name="action" class="btn btn-secondary d-none" value="filter_klient_name">Отбор</button>
-                </div> 
-                
+                </div>
+
                 <div class="poisk-el">
                     <label>
                         Название вида счета
@@ -109,10 +117,10 @@
                         </select>
                     </label>
                     <button name="action" class="btn btn-secondary d-none" value="filter_account_name">Отбор</button>
-            </div> 
+            </div>
             </div>
 
-           
+
         </form>
         <?php if(isset($message) && $message){ ?>
             <div class="alert alert-warning" role="alert">
@@ -123,10 +131,10 @@
         <table class="table dict">
             <thead>
                 <tr>
-                    <th data-sort scope="col" onclick="sortTable(0, this, 'str')" class="<?= isset($hideFIOColumn) && $hideFIOColumn ? 'd-none' : ''?>">ФИО клиента</th>
+                    <th data-sort data-column="name_klient" scope="col" onclick="sortTable(this)" class="<?= (isset($hideFIOColumn) && $hideFIOColumn ? 'd-none' : '' ).($sortColumn == "name_klient" ? ($sortDirection == "ASC" ? "asc" : "desc") : "")?>">ФИО клиента</th>
                     <th scope="col" class="<?= isset($hideVidShetColumn) && $hideVidShetColumn ? 'd-none' : ''?>">Вид счета</th>
-                    <th data-sort scope="col" onclick="sortTable(2, this, 'num')">Номер счета</th>
-                    <th data-sort scope="col" onclick="sortTable(3, this, 'date')">Дата открытия счета</th>
+                    <th data-sort data-column="number_account" scope="col" onclick="sortTable(this)" class="<?=($sortColumn == "number_account" ? ($sortDirection == "ASC" ? "asc" : "desc") : "")?>">Номер счета</th>
+                    <th data-sort data-column="date_open" scope="col" onclick="sortTable(this)" class="<?=($sortColumn == "date_open" ? ($sortDirection == "ASC" ? "asc" : "desc") : "")?>">Дата открытия счета</th>
                     <th scope="col" class="<?= isset($hideDClodeColumn) && $hideDClodeColumn ? 'd-none' : ''?>">Дата закрытия счета</th>
                     <th scope="col">Начальная сумма на счете</th>
                     <th scope="col"><a type="button" class="btn btn-success" href="add.php">Добавить</a></th>
@@ -165,46 +173,17 @@
 
 <script>
 
-    function sortTable(n, evt, type) {
-    var table = document.querySelector('table'),
-        thead = document.querySelector('thead'),
-        tbody = document.querySelector('tbody'),
-        hData = [...thead.querySelectorAll('th')],
-        bRows = [...tbody.rows],
-        desc = false;
+    function sortTable(evt) {
+        let sortColumnInput = document.getElementById("hidden_input_sort_col");
+        let sortDirectionInput = document.getElementById("hidden_input_sort_direction");
+        let buttonSend = document.getElementById("hidden_button_send");
 
-        hData.map ( (head) => {
-            if(head != evt ) {
-                head.classList.remove('asc', 'desc');
-            }
-        } );
+        sortColumnInput.value = evt.getAttribute("data-column");
+        let desc = evt.classList.contains("asc");
+        sortDirectionInput.value = desc ? "DESC" : "ASC";
 
-        desc = evt.classList.contains ('asc') ? true : false;
-        evt.classList[desc ? 'remove' : 'add']('asc');
-        evt.classList[desc ? 'add' : 'remove']('desc');
-    
-
-        tbody.innerHTML = '';
-
-        bRows.sort( (a, b) => {
-            let x = a.getElementsByTagName('td')[n].innerHTML.toLowerCase(),
-                y= b.getElementsByTagName('td')[n].innerHTML.toLowerCase();
-         //   let notZero = x - y == 0 ? false : true; 
-            if(type!='date'){
-                return type == 'str' ? (desc ? (x < y ? 1 : -1) : (x < y ? -1 : 1)) : (desc ? (y - x) : (x - y));
-            }  else {
-                x = Date.parse(a.getElementsByTagName('td')[n].getAttribute('d-open'));
-                y = Date.parse(b.getElementsByTagName('td')[n].getAttribute('d-open'))
-                return desc ? (y-x) : (x-y);
-            }
-            
-        });
-
-        bRows.map ( (bRow) => {
-           // console.log(bRow.innerHTML);
-            tbody.appendChild(bRow);
-        } )
-}
+        buttonSend.click();
+    }
 
     function frmSubmit(evt) {
         var btn = evt.parentElement.parentElement.lastElementChild;

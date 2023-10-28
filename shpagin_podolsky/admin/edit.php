@@ -71,7 +71,7 @@ extract(getAdmin($id));
         </div>
         <div class="form-group">
             <label for="inputPass">Пароль</label>
-            <input type="text" class="form-control" id="inputPass" name="pass" value="<?=$pass?>">
+            <input type="text" class="form-control" id="inputPass" name="pass">
         </div>
         <div class="form-group">
             <label for="inputFIO">ФИО</label>
