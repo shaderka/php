@@ -30,20 +30,25 @@ if(
     && ($newTel = $_POST['tel'])
     && (isset($_POST['address']))
     && ($newAddress = $_POST['address'])
+    && (isset($_FILES['img']) && ($imgData = $_FILES['img']))
 ){
-    $newimgname = $_FILES['img']['name'] ?? null;
+    $imgName = $imgData['tmp_name'];
     $newPassport = $_POST['passport'] ?? null;
     $passportSearch = $newPassport ? " OR `number_passport` = '$newPassport'" : "";
     $result = $mysqli -> query("SELECT * FROM `klient` WHERE (`klient_fon` = '$newTel'$passportSearch) AND  `id_klient` != $id_klient");
     $count = $result -> num_rows;
 
     if($count === 0){
-        $imgnameSQLStr = $newimgname ? "'$newimgname'" : "'$image'";
         $passportSQLStr = $newPassport ? "'$newPassport'" : "NULL";
-        if((move_uploaded_file($_FILES['img']['tmp_name'], '../assets/img/'.$_FILES['img']['name'])) || (!is_uploaded_file($_FILES['img']['tmp_name']))) {
-            $result = $mysqli -> query("UPDATE `klient` SET `name_klient` = '$newFIO', `klient_fon` = '$newTel',
-                    `number_passport` = $passportSQLStr, `adress` = '$newAddress', `image` = $imgnameSQLStr WHERE `id_klient` = $id_klient");
+        $image = file_get_contents($imgName);
+        if($image) {
+            $imageType = $imgData['type'];
+            $imgnameSQLStr = "data:$imageType;base64, ".base64_encode($image);
+            unset($image);
 
+            $result = $mysqli -> query("UPDATE `klient` SET `name_klient` = '$newFIO', `klient_fon` = '$newTel',
+                    `number_passport` = $passportSQLStr, `adress` = '$newAddress', `image` = '$imgnameSQLStr' WHERE `id_klient` = $id_klient");
+            unset($imgnameSQLStr);
             extract(getClientById($id_klient));
 
             if($result){
@@ -82,7 +87,7 @@ include '../header.php';
     <?php } ?>
     <form method="post" class="form" enctype="multipart/form-data">
         <div class="form-group imgSelect">
-            <img src="../assets/img/<?=$image?>" id="img" class="img-thumbnail" alt="">
+            <img src="<?=$image?>" id="img" class="img-thumbnail" alt="">
             <input type="file" class="form-control" accept="image/jpeg, image/png" name="img" id="InputImg" onchange="readURL(this)"> 
         </div>
         <div class="form-group">

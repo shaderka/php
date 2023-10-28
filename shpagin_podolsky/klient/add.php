@@ -10,20 +10,24 @@ require_once "../bd.php";
         && ($tel = $_POST['tel'])
         && (isset($_POST['address']))
         && ($address = $_POST['address'])
+        && (isset($_FILES['img']) && ($imgName = $_FILES['img']['tmp_name']))
     ){
-        $imgname = $_FILES['img']['name'] ?? null;
         $passport = $_POST['passport'] ?? null;
         $passportSearch = $passport ? " OR `number_passport` = '$passport'" : "";
         $result = $mysqli -> query("SELECT * FROM `klient` WHERE `klient_fon` = '$tel'$passportSearch");
         $count = $result -> num_rows;
 
         if($count === 0){
-            $imgnameSQLStr = $imgname ? "'$imgname'" : "NULL";
             $passportSQLStr = $passport ? "'$passport'" : "NULL";
 
-            if((move_uploaded_file($_FILES['img']['tmp_name'], '../assets/img/'.$_FILES['img']['name'])) || (!is_uploaded_file($_FILES['img']['tmp_name']))){
-                $result = $mysqli -> query("INSERT INTO `klient` VALUES (NULL, '$FIO', '$tel', $passportSQLStr, '$address', $imgnameSQLStr)");
+            $image = file_get_contents($imgName);
 
+            if($image){
+                $imageType = $_FILES['img']['type'];
+                $imgnameSQLStr = "data:$imageType;base64, ".base64_encode($image);
+                unset($image);
+                $result = $mysqli -> query("INSERT INTO `klient` VALUES (NULL, '$FIO', '$tel', $passportSQLStr, '$address', '$imgnameSQLStr')");
+                unset($imgnameSQLStr);
                 if($result){
                     $resultCode = "success";
                     $message = "Запись успешно добавлена";
@@ -35,9 +39,6 @@ require_once "../bd.php";
                 $resultCode = "danger";
                 $message = "Ошибка при загрузке изображения";
             }
-
-            
-
         }else{
             $resultCode = "warning";
             $message = "Клиент с такими данными уже существует в системе";
