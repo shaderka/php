@@ -32,7 +32,7 @@ if(
     && ($newAddress = $_POST['address'])
     && (isset($_FILES['img']) && ($imgData = $_FILES['img']))
 ){
-    $imgName = $imgData['tmp_name'];
+    $imgName = $imgData['tmp_name'] ?? false;
     $newPassport = $_POST['passport'] ?? null;
     $passportSearch = $newPassport ? " OR `number_passport` = '$newPassport'" : "";
     $result = $mysqli -> query("SELECT * FROM `klient` WHERE (`klient_fon` = '$newTel'$passportSearch) AND  `id_klient` != $id_klient");
@@ -40,28 +40,33 @@ if(
 
     if($count === 0){
         $passportSQLStr = $newPassport ? "'$newPassport'" : "NULL";
-        $image = file_get_contents($imgName);
-        if($image) {
-            $imageType = $imgData['type'];
-            $imgnameSQLStr = "data:$imageType;base64, ".base64_encode($image);
-            unset($image);
 
-            $result = $mysqli -> query("UPDATE `klient` SET `name_klient` = '$newFIO', `klient_fon` = '$newTel',
-                    `number_passport` = $passportSQLStr, `adress` = '$newAddress', `image` = '$imgnameSQLStr' WHERE `id_klient` = $id_klient");
-            unset($imgnameSQLStr);
-            extract(getClientById($id_klient));
-
-            if($result){
-                $resultCode = "success";
-                $message = "Запись успешно изменена";
+        $imgnameSQLStr = '';
+        if($imgName){
+            $image = @file_get_contents($imgName);
+            if($image) {
+                $imageType = $imgData['type'];
+                $imgnameSQLStr = "data:$imageType;base64, ".base64_encode($image);
+                $imgnameSQLStr = ", `image` = '$imgnameSQLStr'";
+                unset($image);
             }else{
                 $resultCode = "danger";
-                $message = "Ошибка при изменении записи: ". $mysqli->error;
-            }
-        } else {
-                $resultCode = "danger";
                 $message = "Ошибка при загрузке изображения";
-        } 
+            }
+        }
+
+        $result = $mysqli -> query("UPDATE `klient` SET `name_klient` = '$newFIO', `klient_fon` = '$newTel',
+                    `number_passport` = $passportSQLStr, `adress` = '$newAddress' $imgnameSQLStr WHERE `id_klient` = $id_klient");
+
+        unset($imgnameSQLStr);
+        if($result){
+            $resultCode = "success";
+            $message = "Запись успешно изменена";
+            extract(getClientById($id_klient));
+        }else{
+            $resultCode = "danger";
+            $message = "Ошибка при изменении записи: ". $mysqli->error;
+        }
 
     }else{
         $resultCode = "warning";
@@ -87,8 +92,8 @@ include '../header.php';
     <?php } ?>
     <form method="post" class="form" enctype="multipart/form-data">
         <div class="form-group imgSelect">
-            <img src="<?=$image?>" id="img" class="img-thumbnail" alt="">
-            <input type="file" class="form-control" accept="image/jpeg, image/png" name="img" id="InputImg" onchange="readURL(this)"> 
+            <img src="<?= $image ?>" id="img" class="img-thumbnail" alt="">
+            <input type="file" class="form-control" accept="image/jpeg, image/png" name="img" id="InputImg" onchange="readURL(this)">
         </div>
         <div class="form-group">
             <label for="exampleInputFIO">ФИО клиента</label>
@@ -116,6 +121,7 @@ include '../footer.php';
 ?>
 </body>
 <script>
+
 function readURL(evt) {
     var file = evt.files;
     if(file.length > 0){

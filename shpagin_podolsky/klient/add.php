@@ -20,7 +20,7 @@ require_once "../bd.php";
         if($count === 0){
             $passportSQLStr = $passport ? "'$passport'" : "NULL";
 
-            $image = file_get_contents($imgName);
+            $image = file_get_contents($imgName) ?? false;
 
             if($image){
                 $imageType = $_FILES['img']['type'];
