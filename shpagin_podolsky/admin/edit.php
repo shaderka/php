@@ -23,8 +23,6 @@ require_once "../bd.php";
 if(
     isset($_POST['login'])
     && ($login = $_POST['login'])
-    && isset($_POST['pass'])
-    && ($pass = $_POST['pass'])
     && isset($_POST['fio'])
     && ($fio = $_POST['fio'])
     && isset($_POST['role'])
@@ -37,8 +35,16 @@ if(
     $result = $mysqli -> query("SELECT * FROM `admin` WHERE (`login` = '$login' OR `email` = '$email' OR `phone` = '$phone') AND `id_admin` != $id");
 
     if($result -> num_rows === 0){
-        $passHash = md5($pass);
-        $result = $mysqli -> query("UPDATE `admin` SET `login` = '$login', `pass` = '$passHash', `fio` = '$fio', `role` = '$role', `email` = '$email', `phone` = '$phone' WHERE `id_admin` = $id");
+        $passSQL = "";
+        if(
+            isset($_POST['pass'])
+            && ($pass = $_POST['pass'])
+        ){
+            $passHash = md5($pass);
+            $passSQL = "`pass` = '$passHash', ";
+        }
+
+        $result = $mysqli -> query("UPDATE `admin` SET `login` = '$login', $passSQL `fio` = '$fio', `role` = '$role', `email` = '$email', `phone` = '$phone' WHERE `id_admin` = $id");
         if($result){
             $resultCode = "success";
             $message = "Запись успешно обновлена";
